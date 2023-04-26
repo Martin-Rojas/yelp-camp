@@ -1,0 +1,31 @@
+<% layout('templates/boilerplate') %>
+
+<h1>All campgrounds</h1>
+<a href="/campgrounds/new">Enter new campground</a>
+
+<% campgrounds.forEach(campground => { %>
+<div class="card">
+   <div class="row">
+      <div class="col-md-4">
+         <img
+            class="img-fluid"
+            src="<%= campground.image %> "
+            alt="campground image"
+            srcset=""
+         />
+      </div>
+      <div class="col-md-8">
+         <div class="card-body">
+            <h5 class="card-title"><%= campground.title %></h5>
+            <p class="card-text"><%= campground.description %></p>
+            <p class="card-text">
+               <small class="text-muted"><%= campground.location %></small>
+            </p>
+            <a href="/campgrounds/<%= campground._id%>" class="btn btn-primary"
+               ><%= campground.title %></a
+            >
+         </div>
+      </div>
+   </div>
+</div>
+<% }) %>

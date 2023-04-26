@@ -1,0 +1,14 @@
+<% layout('templates/boilerplate') %>
+<div class="row">
+   <div class="col-6 offset-3">
+      <div
+         style="overflow-wrap: break-word"
+         class="alert alert-danger"
+         role="alert"
+      >
+         <h1><%= err.message %></h1>
+
+         <p><%= err.stack %></p>
+      </div>
+   </div>
+</div>
