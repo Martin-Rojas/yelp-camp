@@ -15,6 +15,9 @@
             <li class="text-muted list-group-item">
                <%= campGroundFound.location %>
             </li>
+            <li class="list-group-item">
+               Summitted by: <%= campGroundFound.author.username %>
+            </li>
             <li class="list-group-item">$<%= campGroundFound.price %>/night</li>
          </ul>
          <div class="card-body">

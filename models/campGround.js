@@ -9,6 +9,7 @@ const CampgroundSchema = new Schema({
    description: String,
    location: String,
    image: String,
+   author: { type: Schema.Types.ObjectId, ref: "User" },
    // this will make a realtionship with the review schema(one way relation)
    reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
 });

@@ -36,9 +36,12 @@ router.get("/new", isLoggedIn, (req, res) => {
 // Create a new campground
 router.post(
    "/",
+   isLoggedIn,
    validateCampground,
    catchAsync(async (req, res, next) => {
       const newCampground = new Campground(req.body.campground);
+      // It will add the current user as the author of the campground.
+      newCampground.author = req.user._id;
       await newCampground.save();
       // Set a flash message by passing the key, followed by the value, to req.flash().
       req.flash("success", "Successfully create a campground!");
@@ -87,7 +90,9 @@ router.get(
    "/:id",
    catchAsync(async (req, res, next) => {
       const { id } = req.params;
-      const campGroundFound = await Campground.findById(id).populate("reviews");
+      const campGroundFound = await Campground.findById(id)
+         .populate("reviews")
+         .populate("author");
 
       /** This line will prevent an error for not found the campground */
       if (!campGroundFound) {
