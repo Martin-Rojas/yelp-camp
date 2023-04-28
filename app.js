@@ -8,6 +8,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const expressError = require("./utils/expressErrors");
 
 // requires the model with Passport-Local Mongoose plugged in
 const User = require("./models/user");

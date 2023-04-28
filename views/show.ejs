@@ -21,6 +21,9 @@
             <li class="list-group-item">$<%= campGroundFound.price %>/night</li>
          </ul>
          <div class="card-body">
+            <% if (currentUser &&
+            campGroundFound.author.equals(currentUser._id)) { %>
+
             <form
                action="/campgrounds/<%= campGroundFound._id %>/edit"
                method="get"
@@ -36,7 +39,7 @@
             >
                <button class="btn btn-danger">DELETE</button>
             </form>
-
+            <% } %>
             <a class="btn btn-info d-inline" href="/campgrounds"
                >All campgrounds</a
             >

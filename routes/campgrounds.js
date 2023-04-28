@@ -4,20 +4,7 @@ const { campgroundSchema, reviewSchema } = require("../schemas/schemas");
 const Campground = require("../models/campGround");
 const catchAsync = require("../utils/catchAsync");
 const ExpressError = require("../utils/expressErrors");
-const { isLoggedIn } = require("../middleware");
-
-// This middleware only will be use for a specific routes.
-// that checks for errors before a campground is made.
-const validateCampground = (req, res, next) => {
-   const { error } = campgroundSchema.validate(req.body);
-
-   if (error) {
-      const msg = error.details.map((el) => el.message).join(",");
-      throw new ExpressError(msg, 400);
-   } else {
-      next();
-   }
-};
+const { isLoggedIn, isAuthor, validateCampground } = require("../middleware");
 
 // Show all campgrounds
 router.get(
@@ -52,6 +39,7 @@ router.post(
 // Edit campground
 router.get(
    "/:id/edit",
+   isAuthor,
    catchAsync(async (req, res) => {
       const { id } = req.params;
 
@@ -71,6 +59,7 @@ router.get(
 // Update a campground
 router.put(
    "/:id",
+   isAuthor,
    catchAsync(async (req, res, next) => {
       const campGroundEdited = await Campground.findByIdAndUpdate(
          req.params.id,
@@ -108,6 +97,7 @@ router.get(
 // Delete a campground
 router.delete(
    "/:id",
+   isAuthor,
    catchAsync(async (req, res) => {
       const { id } = req.params;
       const deletedCampground = await Campground.findByIdAndDelete(id);
