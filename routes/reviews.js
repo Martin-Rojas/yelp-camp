@@ -5,6 +5,7 @@ const router = express.Router({ mergeParams: true });
 const { campgroundSchema, reviewSchema } = require("../schemas/schemas");
 const Campground = require("../models/campGround");
 const Review = require("../models/review");
+const { isLoggedIn, isReviewAuthor } = require("../middleware");
 
 // Utils
 const ExpressError = require("../utils/expressErrors");
@@ -26,11 +27,14 @@ const validateReview = (req, rex, next) => {
 router.post(
    "/",
    validateReview,
+   isLoggedIn,
    catchAsync(async (req, res) => {
       const { id } = req.params;
 
       const campGroundFound = await Campground.findById(id);
       const review = new Review(req.body.review);
+      // it will save the auhor id into review field of author.
+      review.author = req.user._id;
       campGroundFound.reviews.push(review);
 
       await review.save();
@@ -46,6 +50,8 @@ router.post(
 // Delete a single review
 router.delete(
    `/:reviewId`,
+   isLoggedIn,
+   isReviewAuthor,
    catchAsync(async (req, res) => {
       const { id, reviewId } = req.params;
 
