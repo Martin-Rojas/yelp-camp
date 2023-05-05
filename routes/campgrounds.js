@@ -5,106 +5,35 @@ const Campground = require("../models/campGround");
 const catchAsync = require("../utils/catchAsync");
 const ExpressError = require("../utils/expressErrors");
 const { isLoggedIn, isAuthor, validateCampground } = require("../middleware");
+const {
+   index,
+   newCampgroundForm,
+   createCampground,
+   editCampground,
+   updateCampground,
+   showCampground,
+   deleteCampground,
+} = require("../controllers/campgrounds");
 
 // Show all campgrounds
-router.get(
-   "/",
-   catchAsync(async (req, res) => {
-      const campgrounds = await Campground.find({});
-      res.render("campgrounds", { campgrounds });
-   })
-);
+router.get("/", catchAsync(index));
 
 // show form to create a new campground
-router.get("/new", isLoggedIn, (req, res) => {
-   res.render("new");
-});
+router.get("/new", isLoggedIn, newCampgroundForm);
 
 // Create a new campground
-router.post(
-   "/",
-   isLoggedIn,
-   validateCampground,
-   catchAsync(async (req, res, next) => {
-      const newCampground = new Campground(req.body.campground);
-      // It will add the current user as the author of the campground.
-      newCampground.author = req.user._id;
-      await newCampground.save();
-      // Set a flash message by passing the key, followed by the value, to req.flash().
-      req.flash("success", "Successfully create a campground!");
-      res.redirect(`/campgrounds/${newCampground._id}`);
-   })
-);
+router.post("/", isLoggedIn, validateCampground, catchAsync(createCampground));
 
 // Edit campground
-router.get(
-   "/:id/edit",
-   isAuthor,
-   catchAsync(async (req, res) => {
-      const { id } = req.params;
-
-      const campGroundFound = await Campground.findById(id);
-
-      /** This line will prevent an error for not found the campground */
-      if (!campGroundFound) {
-         // Set a flash message by passing the key, followed by the value, to req.flash().
-         req.flash("error", "Campground Not Found");
-         return res.redirect("/campgrounds");
-      }
-
-      res.render("edit", { campGroundFound });
-   })
-);
+router.get("/:id/edit", isAuthor, catchAsync(editCampground));
 
 // Update a campground
-router.put(
-   "/:id",
-   isAuthor,
-   catchAsync(async (req, res, next) => {
-      const campGroundEdited = await Campground.findByIdAndUpdate(
-         req.params.id,
-         {
-            // copies all properties
-            ...req.body.campground,
-         }
-      );
-
-      req.flash("success", "Successfully updated campground");
-      res.redirect("/campgrounds");
-   })
-);
+router.put("/:id", isAuthor, catchAsync(updateCampground));
 
 // Show a campground
-router.get(
-   "/:id",
-   catchAsync(async (req, res, next) => {
-      const { id } = req.params;
-      const campGroundFound = await Campground.findById(id)
-         .populate({ path: "reviews", populate: { path: "author" } })
-         .populate("author");
-
-      /** This line will prevent an error for not found the campground */
-      if (!campGroundFound) {
-         // Set a flash message by passing the key, followed by the value, to req.flash().
-         req.flash("error", "Campground Not Found");
-         return res.redirect("/campgrounds");
-      }
-
-      res.render("show", { campGroundFound });
-   })
-);
+router.get("/:id", catchAsync(showCampground));
 
 // Delete a campground
-router.delete(
-   "/:id",
-   isAuthor,
-   catchAsync(async (req, res) => {
-      const { id } = req.params;
-      const deletedCampground = await Campground.findByIdAndDelete(id);
-      // Set a flash message by passing the key, followed by the value, to req.flash().
-      req.flash("success", "Successfully delete a campground!");
-      res.redirect("/campgrounds");
-   })
-);
+router.delete("/:id", isAuthor, catchAsync(deleteCampground));
 
 module.exports = router;
