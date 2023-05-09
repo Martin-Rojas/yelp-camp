@@ -36,6 +36,18 @@ module.exports.validateCampground = (req, res, next) => {
    }
 };
 
+// It will check for error before a review is made.
+module.exports.validateReview = (req, rex, next) => {
+   const { error } = reviewSchema.validate(req.body);
+
+   if (error) {
+      const msg = error.details.map((el) => el.message).join(",");
+      throw new ExpressError(msg, 400);
+   } else {
+      next();
+   }
+};
+
 /*It will check if the user has authorization to do an specifc action to a campground.*/
 module.exports.isAuthor = async (req, res, next) => {
    const { id } = req.params;
