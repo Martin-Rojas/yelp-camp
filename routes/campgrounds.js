@@ -26,7 +26,12 @@ router
 router.get("/new", isLoggedIn, campground.newCampgroundForm);
 
 // Edit campground
-router.get("/:id/edit", isAuthor, catchAsync(campground.editCampground));
+router.get(
+   "/:id/edit",
+   isLoggedIn,
+   isAuthor,
+   catchAsync(campground.editCampground)
+);
 
 router
    // All have same path
@@ -34,8 +39,14 @@ router
    // Show a campground
    .get(catchAsync(campground.showCampground))
    // Update a campground
-   .put(isAuthor, catchAsync(campground.updateCampground))
+   .put(
+      isLoggedIn,
+      isAuthor,
+      upload.array(`image`),
+      validateCampground,
+      catchAsync(campground.updateCampground)
+   )
    // Delete a campground
-   .delete(isAuthor, catchAsync(campground.deleteCampground));
+   .delete(isLoggedIn, isAuthor, catchAsync(campground.deleteCampground));
 
 module.exports = router;

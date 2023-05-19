@@ -45,6 +45,16 @@ module.exports.updateCampground = async (req, res) => {
       ...req.body.campground,
    });
 
+   // create an array of imgs
+   const imgs = req.files.map((file) => ({
+      url: file.path,
+      filename: file.filename,
+   }));
+
+   // Use the spread operator to add the new images to an exixting array of images.
+   campGroundEdited.images.push(...imgs);
+   await campGroundEdited.save();
+
    req.flash("success", "Successfully updated campground");
    res.redirect(`/campgrounds/${campGroundEdited._id}`);
 };
