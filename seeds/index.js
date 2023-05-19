@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const cities = require("./cities");
 const { places, descriptors } = require("./seedsHelpers");
-const Campground = require("../models/campground");
+const Campground = require("../models/campGround");
 
 mongoose.set("strictQuery", true);
 
@@ -25,10 +25,20 @@ const seedDB = async () => {
          author: "642388b7e7dd8de7c3c89971",
          location: `${cities[random1000].city}, ${cities[random1000].state}`,
          title: `${sample(descriptors)} ${sample(places)}`,
-         image: "https://source.unsplash.com/random/900%C3%97700/?campgrounds",
+         // image: "https://source.unsplash.com/random/900%C3%97700/?campgrounds",
          description:
             "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Temporibus saepe voluptatem reprehenderit in aut amet at quis facere. Fugiat mollitia quos soluta excepturi dicta assumenda esse doloribus nobis ipsam natus?",
          price,
+         images: [
+            {
+               url: "https://res.cloudinary.com/drzfeh8fk/image/upload/v1684455849/YelpCamp/ibjjvmys6sojiaikka2i.jpg",
+               filename: "YelpCamp/ibjjvmys6sojiaikka2i",
+            },
+            {
+               url: "https://res.cloudinary.com/drzfeh8fk/image/upload/v1684455851/YelpCamp/ku4jo4nm87jqdkxlcfcc.jpg",
+               filename: "YelpCamp/ku4jo4nm87jqdkxlcfcc",
+            },
+         ],
       });
       await camp.save();
    }

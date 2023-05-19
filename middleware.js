@@ -16,7 +16,7 @@ module.exports.isLoggedIn = (req, res, next) => {
 };
 
 module.exports.checkReturnTo = (req, res, next) => {
-   console.log(req.session.returnTo);
+   // console.log(req.session.returnTo);
    if (req.session.returnTo) {
       res.locals.returnTo = req.session.returnTo;
    }

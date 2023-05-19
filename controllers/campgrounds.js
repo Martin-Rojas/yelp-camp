@@ -11,6 +11,11 @@ module.exports.newCampgroundForm = (req, res) => {
 
 module.exports.createCampground = async (req, res, next) => {
    const newCampground = new Campground(req.body.campground);
+   newCampground.images = req.files.map((file) => ({
+      url: file.path,
+      filename: file.filename,
+   }));
+
    // It will add the current user as the author of the campground.
    newCampground.author = req.user._id;
    await newCampground.save();
