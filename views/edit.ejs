@@ -62,8 +62,6 @@
             </div>
          </div>
 
-         <label class="form-label" for="image">Add Image</label>
-         <input type="file" name="image" id="image" multiple />
          <!-- <div class="mb-3">
             <label class="form-label" for="image">Image URL</label>
             <input
@@ -91,6 +89,18 @@
             <div class="invalid-feedback">
                Please enter a description of the campground.
             </div>
+         </div>
+
+         <div class="mb-3 custom-file">
+            <label for="image" class="form-label">Add Images</label>
+            <input
+               class="form-control"
+               type="file"
+               id="image"
+               name="image"
+               multiple
+            />
+            <label for="image" class="custom-file-label text-muted"></label>
          </div>
          <button class="btn btn-info mb-3" id="submit">Edit campground</button>
       </form>
