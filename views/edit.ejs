@@ -102,6 +102,23 @@
             />
             <label for="image" class="custom-file-label text-muted"></label>
          </div>
+
+         <div class="mb-3">
+            <% campGroundFound.images.forEach(function (img, i) { %>
+
+            <img src="<%= img.url %>" class="img-thumbnail" alt="image place" />
+            <div class="form-check-inline">
+               <input
+                  type="checkbox"
+                  name="deleteImages[]"
+                  id="image<%= i %>"
+                  value="<%= img.filename %>"
+               />
+            </div>
+            <label for="image<%= i %>">Delete</label>
+            <% }) %>
+         </div>
+
          <button class="btn btn-info mb-3" id="submit">Edit campground</button>
       </form>
       <a href="/campgrounds">Back to all campgrounds</a>
