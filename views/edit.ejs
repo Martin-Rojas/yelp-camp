@@ -106,7 +106,12 @@
          <div class="mb-3">
             <% campGroundFound.images.forEach(function (img, i) { %>
 
-            <img src="<%= img.url %>" class="img-thumbnail" alt="image place" />
+            <img
+               src="<%= img.thumbnail %>"
+               class="img-thumbnail"
+               alt="image place"
+            />
+
             <div class="form-check-inline">
                <input
                   type="checkbox"
