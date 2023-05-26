@@ -20,6 +20,17 @@ const CampgroundSchema = new Schema({
    price: Number,
    description: String,
    location: String,
+   geometry: {
+      type: {
+         type: String,
+         enum: ["Point"],
+         required: true,
+      },
+      coordinates: {
+         type: [Number],
+         required: true,
+      },
+   },
    images: [ImageSchema],
    author: { type: Schema.Types.ObjectId, ref: "User" },
    // this will make a realtionship with the review schema(one way relation)

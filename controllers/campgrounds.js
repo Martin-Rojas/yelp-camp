@@ -1,4 +1,8 @@
 const Campground = require("../models/campGround");
+const mbxGoecoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const mapBoxToken = process.env.MAPBOX_TOKEN;
+const geocoder = mbxGoecoding({ accessToken: mapBoxToken });
+
 const { cloudinary } = require("../cloudinary/index");
 
 module.exports.index = async (req, res) => {
@@ -11,32 +15,40 @@ module.exports.newCampgroundForm = (req, res) => {
 };
 
 module.exports.createCampground = async (req, res, next) => {
+   const geoData = await geocoder
+      .forwardGeocode({
+         query: req.body.campground.location,
+         limit: 1,
+      })
+      .send();
+   // geoData.body.features[0].geometry.coordinates.map((coordinate) => {
+   //    console.log(coordinate);
+   // });
+   // res.send(geoData.body.features[0].geometry);
+
    const newCampground = new Campground(req.body.campground);
    newCampground.images = req.files.map((file) => ({
       url: file.path,
       filename: file.filename,
    }));
-
+   newCampground.geometry = geoData.body.features[0].geometry;
    // It will add the current user as the author of the campground.
    newCampground.author = req.user._id;
    await newCampground.save();
+   console.log(newCampground);
    // Set a flash message by passing the key, followed by the value, to req.flash().
    req.flash("success", "Successfully create a campground!");
    res.redirect(`/campgrounds/${newCampground._id}`);
 };
-
 module.exports.editCampground = async (req, res) => {
    const { id } = req.params;
-
    const campGroundFound = await Campground.findById(id);
-
    /** This line will prevent an error for not found the campground */
    if (!campGroundFound) {
       // Set a flash message by passing the key, followed by the value, to req.flash().
       req.flash("error", "Campground Not Found");
       return res.redirect("/campgrounds");
    }
-
    res.render("edit", { campGroundFound });
 };
 
