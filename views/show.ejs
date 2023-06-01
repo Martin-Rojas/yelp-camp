@@ -3,6 +3,7 @@
 
 <div class="row">
    <div class="col-md-6">
+      <div id="map" style="width: 100%; height: 300px"></div>
       <div
          id="campgroundCarousel"
          class="carousel slide"
@@ -15,6 +16,7 @@
             </div>
             <%})%>
          </div>
+
          <% if (campGroundFound.images.length > 1) { %>
          <button
             class="carousel-control-prev"
@@ -36,12 +38,14 @@
          </button>
          <% } %>
       </div>
+
       <!-- ------------------------------------------------------------------------------- -->
       <div class="card mb-3">
          <div class="card-body">
             <h5 class="card-title"><%= campGroundFound.title %></h5>
             <p class="card-text"><%= campGroundFound.description %></p>
          </div>
+
          <ul class="list-group list-group-flush">
             <li class="text-muted list-group-item">
                <%= campGroundFound.location %>
@@ -51,10 +55,9 @@
             </li>
             <li class="list-group-item">$<%= campGroundFound.price %>/night</li>
          </ul>
-         <div class="card-body">
-            <% if (currentUser &&
-            campGroundFound.author.equals(currentUser._id)) { %>
 
+         <%if(currentUser && campGroundFound.author.equals(currentUser._id)) {%>
+         <div class="card-body">
             <form
                action="/campgrounds/<%= campGroundFound._id %>/edit"
                method="get"
@@ -70,14 +73,17 @@
             >
                <button class="btn btn-danger">DELETE</button>
             </form>
-            <% } %>
+
             <a class="btn btn-info d-inline" href="/campgrounds"
                >All campgrounds
             </a>
          </div>
+         <% } %>
+
          <div class="card-footer text-muted">2 days ago</div>
       </div>
    </div>
+
    <div class="col-md-6">
       <%if (currentUser) {%>
       <form
@@ -148,32 +154,44 @@
 
          <button class="btn btn-info mt-2">Submit</button>
       </form>
-      <%}%>
-      <div>
-         <% campGroundFound.reviews.forEach(review => { %>
-         <div class="card mb-3">
-            <div class="card-body">
-               <p class="starability-result" data-rating="<%= review.rating %>">
-                  Rated: 3 stars
-               </p>
 
-               <h6 class="card-subtitle mb-2 text-muted">
-                  by <%= review.author.username%>
-               </h6>
-               <p class="card-text">Review: <%= review.body %></p>
-               <form
-                  action="/campgrounds/<%= campGroundFound._id %>/reviews/<%= review._id %>?_method=DELETE"
-                  method="POST"
-               >
-                  <%if (currentUser && review.author.equals(currentUser._id))
-                  {%>
-                  <button class="btn btn-small btn-danger">Delete</button>
-                  <%}%>
-               </form>
-            </div>
+      <%}%> <% campGroundFound.reviews.forEach(review => { %>
+      <div class="card mb-3">
+         <div class="card-body">
+            <p class="starability-result" data-rating="<%= review.rating %>">
+               Rated: 3 stars
+            </p>
+
+            <h6 class="card-subtitle mb-2 text-muted">
+               by <%= review.author.username%>
+            </h6>
+            <p class="card-text">Review: <%= review.body %></p>
+
+            <%if (currentUser && review.author.equals(currentUser._id)) {%>
+            <form
+               action="/campgrounds/<%= campGroundFound._id %>/reviews/<%= review._id %>?_method=DELETE"
+               method="POST"
+            >
+               <button class="btn btn-small btn-danger">Delete</button>
+            </form>
+            <%}%>
          </div>
-
-         <% }) %>
       </div>
+
+      <% }) %>
    </div>
 </div>
+
+<script>
+   const mapToken = "<%-process.env.MAPBOX_TOKEN%>";
+   mapboxgl.accessToken = mapToken;
+   const map = new mapboxgl.Map({
+      container: "map", // container ID
+      // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+      style: "mapbox://styles/mapbox/streets-v12", // style URL
+      center: [-74.5, 40], // starting position [lng, lat]
+      zoom: 9, // starting zoom
+   });
+</script>
+
+<script src="/javascripts/showPageMap.js"></script>
