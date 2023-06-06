@@ -28,10 +28,12 @@ module.exports.createCampground = async (req, res, next) => {
       filename: file.filename,
    }));
    newCampground.geometry = geoData.body.features[0].geometry;
+
    // It will add the current user as the author of the campground.
    newCampground.author = req.user._id;
    await newCampground.save();
    console.log(newCampground);
+
    // Set a flash message by passing the key, followed by the value, to req.flash().
    req.flash("success", "Successfully create a campground!");
    res.redirect(`/campgrounds/${newCampground._id}`);
