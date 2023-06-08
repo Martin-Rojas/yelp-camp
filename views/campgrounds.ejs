@@ -7,13 +7,20 @@
 <div class="card">
    <div class="row">
       <div class="col-md-4">
-         <img
+         <% if (campground.images.length) { %><img
             class="img-fluid img-thumbnail"
             src="<%= campground.images[0].url %> "
             alt="campground image"
             srcset=""
          />
+         <% }else { %><img
+            class="img-fluid img-thumbnail"
+            src="https://source.unsplash.com/random/900%C3%97700/?campgrounds"
+            alt="campground image"
+            srcset=""
+         /><% } %>
       </div>
+
       <div class="col-md-8">
          <div class="card-body">
             <h5 class="card-title"><%= campground.title %></h5>
