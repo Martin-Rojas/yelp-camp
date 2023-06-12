@@ -11,3 +11,8 @@ const map = new mapboxgl.Map({
 const marker2 = new mapboxgl.Marker({ color: "red", rotation: 45 })
    .setLngLat(campground.geometry.coordinates)
    .addTo(map);
+
+const popup = new mapboxgl.Popup({ offset: 25 })
+   .setLngLat(campground.geometry.coordinates)
+   .setHTML(`<h4>${campground.title}</h4>`)
+   .addTo(map);
