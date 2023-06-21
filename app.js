@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== `production`) {
 
 const express = require("express");
 const mongoose = require("mongoose");
+const mongoSanitize = require("express-mongo-sanitize");
 const path = require("path");
 const ejsMate = require("ejs-mate");
 const Joi = require("joi");
@@ -38,6 +39,8 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
+// To remove data using these defaults:
+app.use(mongoSanitize());
 
 const sessionConfig = {
    secret: `thisshouldbeabettersecret`,
